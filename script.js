@@ -17,7 +17,7 @@ const audioTempoFinalizado = new Audio('./sons/beep.mp3')
 const audioTempoPausado = new Audio('./sons/pause.mp3')
 const audioTempoPlay = new Audio('./sons/play.wav')
 
-let tempoDecoridoEmSegundos = 1500
+let tempoDecoridoEmSegundos = 20
 let intervaloId = null
 
 musica.loop = true
@@ -31,19 +31,19 @@ musicaFocoInput.addEventListener('change', () => {
 })
 
 focoBt.addEventListener('click', () => {
-    tempoDecoridoEmSegundos = 1500
+    tempoDecoridoEmSegundos = 20
     alterarContexto('foco')
     focoBt.classList.add('active')
 })
 
 curtoBt.addEventListener('click', () => {
-    tempoDecoridoEmSegundos = 300
+    tempoDecoridoEmSegundos = 30
     alterarContexto('descanso-curto')
     curtoBt.classList.add('active')
 })
 
 longoBt.addEventListener('click', () => {
-    tempoDecoridoEmSegundos = 900
+    tempoDecoridoEmSegundos = 90
     alterarContexto('descanso-longo')
     longoBt.classList.add('active')
 })
@@ -79,6 +79,11 @@ const contagemRegressiva = () => {
     if(tempoDecoridoEmSegundos <= 0){
         audioTempoFinalizado.play()
         alert('Tempo finalizado!')
+        const focoAtivo = html.getAttribute('data-contexto') == 'foco'
+        if(focoAtivo) {
+            const evento = new CustomEvent('FocoFinalizado')
+            document.dispatchEvent(evento)
+        }
         zerar()
         return
     }
